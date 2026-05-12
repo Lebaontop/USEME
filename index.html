@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE END</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="bg-layer"></div>
+    <div class="bg-effect"></div>
+
+    <header class="top-bar">
+
+        <div class="left-controls">
+
+            <button onclick="toggleAdmin()">
+                🛠 الإدارة
+            </button>
+
+            <button onclick="toggleAuction()">
+                🪙 التوقعات
+            </button>
+
+        </div>
+
+        <div class="center-title">
+            <h1>THE END</h1>
+        </div>
+
+        <div class="right-controls">
+
+            <button onclick="toggleRules()">
+                📘 الشرح
+            </button>
+
+        </div>
+
+    </header>
+
+    <main class="stage">
+
+        <section class="timer-panel">
+
+            <div id="timer">00</div>
+
+            <div class="timer-controls">
+
+                <button onclick="startTimerManual()">بدء ▶</button>
+                <button onclick="pauseTimer()">إيقاف ⏸</button>
+                <button onclick="resumeTimer()">استمرار ⏯</button>
+                <button onclick="restartTimer()">🔄 تصفير الوقت</button>
+
+            </div>
+
+        </section>
+
+        <section class="action-panel">
+
+            <button class="main-action" onclick="triggerEvent()">
+                سحب تحدي جديد 💀
+            </button>
+
+        </section>
+
+        <section class="event-panel">
+
+            <h2>الحدث الحالي</h2>
+            <div id="eventBox">بانتظار تشغيل النظام...</div>
+
+        </section>
+
+    </main>
+
+    <section class="players-section">
+
+        <h2>👥 اللاعبين</h2>
+        <div id="playerGrid"></div>
+
+    </section>
+
+    <aside id="adminPanel" class="side-panel right">
+
+        <button class="close-panel" onclick="toggleAdmin()">إغلاق</button>
+
+        <h2>لوحة التحكم</h2>
+
+        <input id="playerName" placeholder="اسم اللاعب">
+        <button onclick="addPlayer()">إضافة لاعب</button>
+
+        <input id="eventTime" type="number" placeholder="وقت الحدث" value="10">
+
+        <button class="btn-reset" onclick="resetSystem()">تصفير النظام</button>
+
+    </aside>
+
+    <aside id="auctionPanel" class="side-panel left">
+
+        <button class="close-panel" onclick="toggleAuction()">إغلاق</button>
+
+        <h2>التوقعات</h2>
+
+        <div class="auction-inputs">
+
+            <input id="userName" placeholder="اسمك">
+            <input id="prediction" placeholder="من سيخرج؟">
+            <button onclick="sendPrediction()">إرسال</button>
+
+        </div>
+
+        <button onclick="resetPredictions()">🪙 تصفير التوقعات</button>
+
+        <div id="predictionList"></div>
+
+    </aside>
+
+    <div id="rulesModal" class="modal hidden">
+
+        <h2>الشرح</h2>
+
+        <ul>
+
+            <li>نظام تحديات وإقصاء عشوائي</li>
+            <li>تحكم كامل بالإدارة</li>
+            <li>توقعات مباشرة</li>
+
+        </ul>
+
+        <button onclick="toggleRules()">إغلاق</button>
+
+    </div>
+
+    <footer id="logBox"></footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
