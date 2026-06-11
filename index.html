@@ -15,7 +15,7 @@
 
         /* الخلفية */
         body {
-            margin: 0; padding: 0; background-color: #050505; color: #ffffff;
+            margin: 0; padding: 0; background-color: #030303; color: #ffffff;
             font-family: 'Arial', sans-serif; overflow: hidden;
             display: flex; justify-content: center; align-items: center; height: 100vh;
         }
@@ -24,6 +24,7 @@
         #intro-screen {
             text-align: center;
             display: flex; flex-direction: column; align-items: center;
+            z-index: 50;
         }
 
         .typewriter {
@@ -52,45 +53,80 @@
         }
         @keyframes fadeIn { to { opacity: 1; } }
 
-        /* شاشة الحسابات والنجوم */
+        /* شاشة الحسابات */
         #links-screen {
             display: none;
             width: 100%; height: 100%; flex-direction: column;
             justify-content: center; align-items: center;
             position: relative;
-            gap: 15px; /* مسافة متساوية بين الأزرار */
+            gap: 15px; 
         }
 
-        /* النجوم اللانهائية */
+        /* النجوم اللانهائية العشوائية تماماً مع تأثير العمق (Parallax) */
         .stars {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
             background-image: 
-                radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 40px 70px, #dddddd, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 50px 160px, #bbbbbb, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 90px 40px, #ffffff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 130px 80px, #cccccc, rgba(0,0,0,0));
+                radial-gradient(2px 2px at 15% 25%, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 75% 12%, #dddddd, rgba(0,0,0,0)),
+                radial-gradient(2.5px 2.5px at 45% 65%, #bbbbbb, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 85% 80%, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 25% 90%, #cccccc, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 55% 35%, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 95% 45%, #aaaaaa, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 35% 5%, #ffffff, rgba(0,0,0,0));
             background-repeat: repeat;
-            background-size: 200px 200px;
-            animation: moveStars 10s linear infinite;
+            /* أحجام خلفيات مبنية على أرقام أولية لمنع التكرار البصري */
+            background-size: 173px 173px, 211px 211px, 269px 269px, 313px 313px, 379px 379px, 431px 431px, 499px 499px, 547px 547px;
+            animation: moveStars 60s linear infinite; 
         }
+        
+        /* كل طبقة نجوم تتحرك بسرعة مختلفة لإعطاء واقعية الفضاء */
         @keyframes moveStars { 
-            from { background-position: 0 0; } 
-            to { background-position: 0 -200px; } 
+            from { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; } 
+            to { background-position: 0 -2000px, 0 -1500px, 0 -2500px, 0 -1200px, 0 -3000px, 0 -1800px, 0 -3500px, 0 -2200px; } 
         }
 
-        /* --- تصميم الأزرار الجديد والمطابق لصورتك --- */
-        
+        /* --- تصميم كسوف العين الميتة (The Void Eye) --- */
+        #eclipse-container {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px; height: 500px;
+            z-index: 2; 
+            pointer-events: none; 
+        }
+
+        #eclipse-planet {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #000000; 
+            border-radius: 50%;
+            z-index: 3;
+            box-shadow: inset -20px -20px 50px rgba(255,255,255,0.02), 0 0 40px rgba(0,0,0,0.9);
+        }
+
+        #eclipse-glow {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 115%; height: 115%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0) 65%);
+            border-radius: 50%;
+            z-index: 2;
+            transition: transform 0.1s ease-out; 
+        }
+
+        /* --- تصميم الأزرار (المزرعة) --- */
         .social-link {
             z-index: 10; 
             text-decoration: none; color: #ffffff;
             width: 320px; height: 65px;
             display: flex; align-items: center;
             position: relative;
-            background: #0f0f0f; /* لون أسود باهت */
-            border: 4px solid #1a1a1a; /* إطار الزر */
+            background: #0f0f0f; 
+            border: 4px solid #1a1a1a; 
             border-radius: 12px;
-            /* خدعة العشب الأرضي داخل الزر */
             box-shadow: inset 0 -8px 0 0 #2a3b1d; 
             transition: all 0.3s ease;
             padding-left: 80px; 
@@ -106,16 +142,16 @@
         .link-content {
             display: flex; align-items: center; gap: 15px;
             font-weight: bold; letter-spacing: 1px; font-size: 17px;
-            margin-bottom: 5px; /* عشان يرتفع عن العشب */
+            margin-bottom: 5px; 
         }
 
         /* الكوخ */
         .barn-box {
             position: absolute;
             left: -10px; 
-            bottom: 7px; /* يجلس بالضبط فوق العشب */
+            bottom: 7px; 
             width: 75px; height: 75px;
-            background: #2b1d16; /* خشب غامق */
+            background: #2b1d16; 
             border: 4px solid #1a1a1a;
             border-radius: 4px;
             display: flex; justify-content: center; align-items: flex-end;
@@ -123,7 +159,6 @@
             box-sizing: border-box;
         }
 
-        /* السقف الخارجي (الإطار الأسود) */
         .barn-box::before {
             content: '';
             position: absolute;
@@ -133,7 +168,6 @@
             border-bottom: 28px solid #1a1a1a;
         }
 
-        /* السقف الداخلي (لون الخشب) */
         .barn-box::after {
             content: '';
             position: absolute;
@@ -143,7 +177,7 @@
             border-bottom: 21px solid #3d291f;
         }
 
-        /* فلتر كئيب وميت للألوان بس الملامح واضحة */
+        /* الحيوانات */
         .animal-img {
             width: 48px;
             height: 48px;
@@ -151,7 +185,6 @@
             filter: grayscale(85%) brightness(80%) drop-shadow(2px 2px 2px rgba(0,0,0,0.8));
         }
 
-        /* سماعات سبوتيفاي */
         .headphones {
             position: absolute;
             top: 15px;
@@ -172,6 +205,11 @@
 
     <div id="links-screen">
         <div class="stars"></div>
+        
+        <div id="eclipse-container">
+            <div id="eclipse-glow"></div>
+            <div id="eclipse-planet"></div>
+        </div>
         
         <a href="https://discord.gg/9pkfZkHc" class="social-link" target="_blank">
             <div class="barn-box">
@@ -212,10 +250,22 @@
     </div>
 
     <script>
+        // دالة الانتقال
         function enterHome() {
             document.getElementById('intro-screen').style.display = 'none';
             document.getElementById('links-screen').style.display = 'flex';
         }
+
+        // كود تحريك الهالة البيضاء لتعطي تأثير "العين اللي تراقب الماوس"
+        document.addEventListener('mousemove', function(e) {
+            const glow = document.getElementById('eclipse-glow');
+            if (glow) {
+                const x = (e.clientX / window.innerWidth - 0.5) * 100; 
+                const y = (e.clientY / window.innerHeight - 0.5) * 100; 
+                
+                glow.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+            }
+        });
     </script>
 
 </body>
