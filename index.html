@@ -8,19 +8,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* الماوس: فأس سكيلتون */
         * {
             cursor: url('https://api.iconify.design/game-icons/battered-axe.svg?color=white&width=32&height=32'), auto !important; 
         }
 
-        /* الخلفية الأساسية */
         body {
             margin: 0; padding: 0; background-color: #030303; color: #ffffff;
             font-family: 'Arial', sans-serif; overflow: hidden;
             height: 100vh; width: 100vw;
         }
 
-        /* النجوم اللانهائية العشوائية */
         .stars {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
             background-image: 
@@ -42,16 +39,19 @@
             to { background-position: 0 -2000px, 0 -1500px, 0 -2500px, 0 -1200px, 0 -3000px, 0 -1800px, 0 -3500px, 0 -2200px; } 
         }
 
-        /* كسوف العين الميتة (The Void Eye) */
+        /* حاوية الكسوف */
         #eclipse-container {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 500px; height: 500px;
+            width: 350px; height: 350px; 
+            max-width: 85vw; 
+            max-height: 85vw;
             z-index: 2; 
-            pointer-events: none; /* يخليك تقدر تضغط على الأزرار اللي فوقه */
+            pointer-events: none; 
         }
 
+        /* الكوكب الأسود */
         #eclipse-planet {
             position: absolute;
             top: 0; left: 0;
@@ -59,25 +59,28 @@
             background-color: #000000; 
             border-radius: 50%;
             z-index: 3;
-            box-shadow: inset -20px -20px 50px rgba(255,255,255,0.02), 0 0 40px rgba(0,0,0,0.9);
+            /* تم إزالة الظل الأسود الخارجي اللي كان يكتم النور */
+            box-shadow: inset -15px -15px 40px rgba(255,255,255,0.05);
         }
 
+        /* الهالة البيضاء (النور) */
         #eclipse-glow {
             position: absolute;
             top: 50%; left: 50%;
-            width: 115%; height: 115%;
+            width: 150%; height: 150%; /* تكبير النور عشان يطلع برا الكوكب بوضوح */
             transform: translate(-50%, -50%);
-            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0) 65%);
+            /* نور أبيض ناصع مع تدرج قوي */
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 60%);
             border-radius: 50%;
             z-index: 2;
+            filter: blur(15px); /* يخلي النور ناعم وواقعي */
             transition: transform 0.1s ease-out; 
         }
 
-        /* شاشة الترحيب */
         #intro-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 50; /* فوق الخلفية */
+            z-index: 50; 
         }
 
         .typewriter {
@@ -86,8 +89,17 @@
             white-space: nowrap;
             margin: 0 auto;
             letter-spacing: 2px;
+            font-size: 24px; 
             animation: typing 3s steps(40, end), blink-caret .75s step-end infinite;
         }
+
+        @media (max-width: 600px) {
+            .typewriter {
+                font-size: 4.5vw; 
+                letter-spacing: 1px;
+            }
+        }
+
         @keyframes typing { from { width: 0 } to { width: 100% } }
         @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #ffffff; } }
 
@@ -107,20 +119,19 @@
         }
         @keyframes fadeIn { to { opacity: 1; } }
 
-        /* شاشة الحسابات */
         #links-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: none; /* مخفية بالبداية */
+            display: none; 
             flex-direction: column; justify-content: center; align-items: center;
             gap: 15px; 
-            z-index: 50; /* فوق الخلفية */
+            z-index: 50; 
         }
 
-        /* تصميم الأزرار (المزرعة) */
         .social-link {
             z-index: 10; 
             text-decoration: none; color: #ffffff;
             width: 320px; height: 65px;
+            max-width: 90vw; 
             display: flex; align-items: center;
             position: relative;
             background: #0f0f0f; 
@@ -145,7 +156,6 @@
             margin-bottom: 5px; 
         }
 
-        /* الكوخ */
         .barn-box {
             position: absolute;
             left: -10px; 
@@ -177,7 +187,6 @@
             border-bottom: 21px solid #3d291f;
         }
 
-        /* الحيوانات */
         .animal-img {
             width: 48px;
             height: 48px;
@@ -249,20 +258,28 @@
     </div>
 
     <script>
-        // الانتقال من الترحيب للمنصات (مع بقاء الخلفية شغالة)
         function enterHome() {
             document.getElementById('intro-screen').style.display = 'none';
             document.getElementById('links-screen').style.display = 'flex';
         }
 
-        // كود العين اللي تلاحق الماوس (شغال على كل الشاشات الآن)
-        document.addEventListener('mousemove', function(e) {
+        function moveGlow(clientX, clientY) {
             const glow = document.getElementById('eclipse-glow');
             if (glow) {
-                const x = (e.clientX / window.innerWidth - 0.5) * 100; 
-                const y = (e.clientY / window.innerHeight - 0.5) * 100; 
-                
+                // ضاعفت رقم المسافة (كان 100 صار 250) عشان النور يتحرك مسافة أطول ويبان من ورا الكوكب
+                const x = (clientX / window.innerWidth - 0.5) * 250; 
+                const y = (clientY / window.innerHeight - 0.5) * 250; 
                 glow.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+            }
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            moveGlow(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('touchmove', function(e) {
+            if(e.touches.length > 0) {
+                moveGlow(e.touches[0].clientX, e.touches[0].clientY);
             }
         });
     </script>
