@@ -39,7 +39,6 @@
             to { background-position: 0 -2000px, 0 -1500px, 0 -2500px, 0 -1200px, 0 -3000px, 0 -1800px, 0 -3500px, 0 -2200px; } 
         }
 
-        /* حاوية الكسوف */
         #eclipse-container {
             position: absolute;
             top: 50%; left: 50%;
@@ -51,7 +50,6 @@
             pointer-events: none; 
         }
 
-        /* الكوكب الأسود */
         #eclipse-planet {
             position: absolute;
             top: 0; left: 0;
@@ -59,21 +57,18 @@
             background-color: #000000; 
             border-radius: 50%;
             z-index: 3;
-            /* تم إزالة الظل الأسود الخارجي اللي كان يكتم النور */
             box-shadow: inset -15px -15px 40px rgba(255,255,255,0.05);
         }
 
-        /* الهالة البيضاء (النور) */
         #eclipse-glow {
             position: absolute;
             top: 50%; left: 50%;
-            width: 150%; height: 150%; /* تكبير النور عشان يطلع برا الكوكب بوضوح */
+            width: 150%; height: 150%; 
             transform: translate(-50%, -50%);
-            /* نور أبيض ناصع مع تدرج قوي */
             background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 60%);
             border-radius: 50%;
             z-index: 2;
-            filter: blur(15px); /* يخلي النور ناعم وواقعي */
+            filter: blur(15px); 
             transition: transform 0.1s ease-out; 
         }
 
@@ -83,24 +78,45 @@
             z-index: 50; 
         }
 
+        /* --- الحل الجذري لمشكلة حركة النص --- */
+        .typewriter-container {
+            position: relative;
+            display: inline-block; /* يثبت الحجم بالضبط */
+        }
+
+        /* النص المخفي لتثبيت المساحة */
+        .text-placeholder {
+            visibility: hidden;
+            white-space: nowrap;
+            margin: 0;
+            letter-spacing: 2px;
+            font-size: 24px; 
+        }
+
+        /* النص اللي ينكتب فوق المخفي */
         .typewriter {
+            position: absolute;
+            top: 0; left: 0;
+            margin: 0;
             overflow: hidden;
             border-right: 2px solid #ffffff;
             white-space: nowrap;
-            margin: 0 auto;
             letter-spacing: 2px;
             font-size: 24px; 
-            animation: typing 3s steps(40, end), blink-caret .75s step-end infinite;
+            animation: typing 3s steps(40, end) forwards, blink-caret .75s step-end infinite;
         }
 
         @media (max-width: 600px) {
-            .typewriter {
+            .text-placeholder, .typewriter {
                 font-size: 4.5vw; 
                 letter-spacing: 1px;
             }
         }
 
-        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes typing { 
+            from { width: 0; } 
+            to { width: 100%; } /* يعبي المساحة المحجوزة بالضبط بدون ما يتحرك */
+        }
         @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #ffffff; } }
 
         #use-me-btn {
@@ -214,7 +230,10 @@
     </div>
 
     <div id="intro-screen">
-        <h2 class="typewriter">Welcome to the home of Leba</h2>
+        <div class="typewriter-container">
+            <h2 class="text-placeholder">Welcome to the home of Leba</h2>
+            <h2 class="typewriter">Welcome to the home of Leba</h2>
+        </div>
         <button id="use-me-btn" onclick="enterHome()">USE ME</button>
     </div>
 
@@ -266,7 +285,6 @@
         function moveGlow(clientX, clientY) {
             const glow = document.getElementById('eclipse-glow');
             if (glow) {
-                // ضاعفت رقم المسافة (كان 100 صار 250) عشان النور يتحرك مسافة أطول ويبان من ورا الكوكب
                 const x = (clientX / window.innerWidth - 0.5) * 250; 
                 const y = (clientY / window.innerHeight - 0.5) * 250; 
                 glow.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
