@@ -5,131 +5,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home of Leba</title>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
- 
+        /* الخلفية والماوس المخصص */
         body {
-            margin: 0; padding: 0; background-color: #000000; color: #ffffff;
-            font-family: 'Arial', sans-serif; overflow: hidden;
-            display: flex; justify-content: center; align-items: center; height: 100vh;
-        }
-
-    
-        #intro-screen {
-            text-align: center;
-            display: flex; flex-direction: column; align-items: center;
-        }
-
-
-        .typewriter {
+            margin: 0; 
+            padding: 0; 
+            background-color: #050505; 
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
             overflow: hidden;
-            border-right: 2px solid #ffffff;
-            white-space: nowrap;
-            margin: 0 auto;
-            letter-spacing: 2px;
-            animation: typing 3s steps(40, end), blink-caret .75s step-end infinite;
+            /* مؤشر الماوس على شكل فأس، مع بديل افتراضي إذا لم يحمل */
+            cursor: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Axe_icon_black.svg/32px-Axe_icon_black.svg.png'), auto; 
         }
-        @keyframes typing { from { width: 0 } to { width: 100% } }
-        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #ffffff; } }
 
-    
-        #use-me-btn {
-            margin-top: 40px; padding: 10px 30px; background: transparent; color: #ffffff;
-            border: 1px solid #555555; cursor: pointer; font-size: 16px; letter-spacing: 2px;
-            opacity: 0; transition: all 0.3s ease;
-            animation: fadeIn 1s 3s forwards;
+        /* شبكة العوالم (4 غرف موزعة في الشاشة) */
+        .world-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            height: 100vh;
+            width: 100vw;
         }
-        #use-me-btn:hover {
-            border-color: #ffffff; 
-            box-shadow: 0 0 15px rgba(255,255,255,0.7);
-            background-color: #ffffff;
-            color: #000000;
-        }
-        @keyframes fadeIn { to { opacity: 1; } }
 
-   
-        #links-screen {
-            display: none;
-            width: 100%; height: 100%; flex-direction: column;
-            justify-content: center; align-items: center;
+        /* التصميم الأساسي لكل غرفة */
+        .room {
             position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            color: #ffffff;
+            border: 1px solid #111; 
+            transition: all 0.5s ease;
+            background-size: cover;
+            background-position: center;
+            /* هذي الميزة تحول أي صورة لأسود وأبيض وتظلمها */
+            filter: grayscale(100%) brightness(35%); 
         }
 
-      
-        .social-link {
-            z-index: 10; margin: 12px; padding: 15px 30px;
-            text-decoration: none; color: #ffffff;
-            border: 1px solid #333333; border-radius: 4px;
-            width: 220px; 
-            display: flex; align-items: center; justify-content: center; gap: 15px;
-            font-weight: bold; letter-spacing: 1px; font-size: 16px;
-            transition: all 0.3s ease;
-            background: rgba(0, 0, 0, 0.8);
+        /* تأثير التمرير (الماوس) على الغرفة */
+        .room:hover {
+            filter: grayscale(100%) brightness(85%); 
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.9); 
         }
 
-        .social-link i {
-            font-size: 22px; 
+        /* اسم المنصة المخفي الذي يظهر عند التمرير */
+        .room-title {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 8px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            text-shadow: 3px 3px 15px #000000, -1px -1px 15px #000000;
+            z-index: 2;
         }
 
-        .social-link:hover {
-            border-color: #ffffff;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
-            transform: translateY(-3px);
-            background-color: #ffffff;
-            color: #000000; 
+        .room:hover .room-title {
+            opacity: 1;
         }
 
-      
-        .stars {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
-            background-image: 
-                radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 40px 70px, #dddddd, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 50px 160px, #bbbbbb, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 90px 40px, #ffffff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 130px 80px, #cccccc, rgba(0,0,0,0));
-            background-repeat: repeat;
-            background-size: 200px 200px;
-            animation: moveStars 10s linear infinite;
+        /* طبقة الضباب الوهمية فوق الصور */
+        .fog-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(0,0,0,0.2) 20%, #050505 95%);
+            z-index: 1;
         }
-        @keyframes moveStars { 
-            from { background-position: 0 0; } 
-            to { background-position: 0 -200px; } 
+
+        /* --- روابط الصور الواقعية --- */
+        
+        /* الانستقرام: كوخ خشبي مظلم في الغابة */
+        #insta-room {
+            background-image: url('https://images.unsplash.com/photo-1542459957-c584ebf5ebec?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'); 
+        }
+        
+        /* الديسكورد: برج اتصالات حديدي صارم */
+        #discord-room {
+            background-image: url('https://images.unsplash.com/photo-1563204780-b2cc1c002271?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'); 
+        }
+        
+        /* سبوتيفاي: أشجار ميتة ومرعبة */
+        #spotify-room {
+            background-image: url('https://images.unsplash.com/photo-1473656108169-25089f2a03ee?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'); 
+        }
+        
+        /* تيلونيوم: صندوق بريد قديم ومهجور */
+        #tellonym-room {
+            background-image: url('https://images.unsplash.com/photo-1522278453443-42e58c8ca5ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'); 
         }
     </style>
 </head>
 <body>
 
-    <div id="intro-screen">
-        <h2 class="typewriter">Welcome to the home of Leba</h2>
-        <button id="use-me-btn" onclick="enterHome()">USE ME</button>
-    </div>
-
-    <div id="links-screen">
-        <div class="stars"></div>
+    <div class="world-grid">
         
-        <a href="https://discord.gg/9pkfZkHc" class="social-link" target="_blank">
-            <i class="fa-brands fa-discord"></i> Discord
+        <!-- غرفة الإنستقرام -->
+        <a href="https://www.instagram.com/fh8e?igsh=MTd6bng4bG93bjJzeg==" target="_blank" class="room" id="insta-room">
+            <div class="fog-overlay"></div>
+            <div class="room-title">INSTAGRAM</div>
         </a>
-        <a href="https://www.instagram.com/fh8e?igsh=MTd6bng4bG93bjJzeg==" class="social-link" target="_blank">
-            <i class="fa-brands fa-instagram"></i> Instagram
-        </a>
-        <a href="https://tellonym.me/xnmw" class="social-link" target="_blank">
-            <i class="fa-regular fa-comment-dots"></i> Tellonym
-        </a>
-        <a href="https://open.spotify.com/user/31bo326itcsfmoutje4rxxata4ym?si=6pPjZDjiQomv2t_qZFlITQ" class="social-link" target="_blank">
-            <i class="fa-brands fa-spotify"></i> Spotify
-        </a>
-    </div>
 
-    <script>
-        
-        function enterHome() {
-            document.getElementById('intro-screen').style.display = 'none';
-            document.getElementById('links-screen').style.display = 'flex';
-        }
-    </script>
+        <!-- غرفة الديسكورد -->
+        <a href="https://discord.gg/9pkfZkHc" target="_blank" class="room" id="discord-room">
+            <div class="fog-overlay"></div>
+            <div class="room-title">DISCORD</div>
+        </a>
+
+        <!-- غرفة سبوتيفاي -->
+        <a href="https://open.spotify.com/user/31bo326itcsfmoutje4rxxata4ym?si=6pPjZDjiQomv2t_qZFlITQ" target="_blank" class="room" id="spotify-room">
+            <div class="fog-overlay"></div>
+            <div class="room-title">SPOTIFY</div>
+        </a>
+
+        <!-- غرفة تيلونيوم -->
+        <a href="https://tellonym.me/xnmw" target="_blank" class="room" id="tellonym-room">
+            <div class="fog-overlay"></div>
+            <div class="room-title">TELLONYM</div>
+        </a>
+
+    </div>
 
 </body>
 </html>
